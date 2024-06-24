@@ -1,16 +1,24 @@
 import React, { useState } from "react";
 import Card from "../components/card";
 import FormGroup from "../components/form-group";
+import { useNavigate } from "react-router-dom";
+
 
 const CadastroUsuario = () => {
   const [nome, setNome] = useState("");
   const [email, setEmail] = useState("");
   const [senha, setSenha] = useState("");
   const [senhaRepeticao, setSenhaRepeticao] = useState("");
+  
+  const navigate = useNavigate();
 
   const cadastrar = () => {
     console.log({ nome, email, senha, senhaRepeticao });
   };
+
+  const cancelar = () => {
+    navigate('/login')
+  }
 
   return (
     <Card title="Cadastro de usuário">
@@ -68,7 +76,7 @@ const CadastroUsuario = () => {
             >
               Salvar
             </button>
-            <button type="button" className="btn btn-danger">
+            <button onClick={cancelar} type="button" className="btn btn-danger">
               Cancelar
             </button>
           </div>
