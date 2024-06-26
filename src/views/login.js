@@ -2,16 +2,29 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Card from "../components/card";
 import FormGroup from "../components/form-group";
+import axios from "axios";
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [senha, setSenha] = useState("");
-  
+  const [mensagemErro, setMensagemErro] = useState(null);
+
   const navigate = useNavigate();
 
   const entrar = () => {
-    console.log("Email: ", email);
-    console.log("Senha: ", senha);
+    axios
+      .post("http://localhost:8080/usuarios/autenticar", {
+        email: email,
+        senha: senha,
+      })
+      .then((response) => {
+        navigate('/home');
+      })
+      .catch((error) => {
+        const errorMessage = error.response.data;
+        setMensagemErro(errorMessage);
+        console.log(errorMessage);
+      });
   };
 
   const prepareCadastrar = () => {
@@ -24,6 +37,9 @@ const Login = () => {
         <div className="bs-docs-section">
           <Card title="Login">
             <div className="row">
+              {mensagemErro && (
+                <span className="text-danger">{mensagemErro}</span>
+              )}
               <div className="col-lg-12">
                 <div className="bs-component">
                   <fieldset>
@@ -36,7 +52,7 @@ const Login = () => {
                         id="exampleInputEmail1"
                         aria-describedby="emailHelp"
                         placeholder="Digite o e-mail"
-                      ></input>
+                      />
                     </FormGroup>
 
                     <FormGroup label="Senha: *" htmlFor="exampleInputPassword1">
@@ -47,7 +63,7 @@ const Login = () => {
                         className="form-control"
                         id="exampleInputPassword1"
                         placeholder="Digite a senha"
-                      ></input>
+                      />
                     </FormGroup>
                     <button className="btn btn-success" onClick={entrar}>
                       Entrar
@@ -55,6 +71,7 @@ const Login = () => {
                     <button
                       onClick={prepareCadastrar}
                       className="btn btn-danger"
+                      style={{ marginLeft: "10px" }}
                     >
                       Cadastrar
                     </button>
