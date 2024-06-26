@@ -1,7 +1,22 @@
-import React, { useState } from "react";
+import axios from "axios";
+import React, { useEffect, useState } from "react";
 
 const Home = () => {
   const [saldo, setSaldo] = useState(0);
+
+  useEffect(() => {
+    const usuarioLogado = localStorage.getItem("usuario_logado");
+    const usuarioLogadoId = JSON.parse(usuarioLogado).id;
+    axios
+      .get(`http://localhost:8080/usuarios/${usuarioLogadoId}/saldo`)
+      .then((response) => {
+        console.log(response);
+        setSaldo(response.data);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  });
 
   return (
     <div className="jumbotron">

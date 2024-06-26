@@ -18,6 +18,7 @@ const Login = () => {
         senha: senha,
       })
       .then((response) => {
+        localStorage.setItem('usuario_logado', JSON.stringify(response.data))
         navigate('/home');
       })
       .catch((error) => {
