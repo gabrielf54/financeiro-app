@@ -2,29 +2,33 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Card from "../components/card";
 import FormGroup from "../components/form-group";
-import axios from "axios";
+import UsuarioService from "../services/UsuarioService";
 
 const Login = () => {
+  const usuarioService = new UsuarioService();
   const [email, setEmail] = useState("");
   const [senha, setSenha] = useState("");
   const [mensagemErro, setMensagemErro] = useState(null);
-
   const navigate = useNavigate();
 
   const entrar = () => {
-    axios
-      .post("http://localhost:8080/usuarios/autenticar", {
-        email: email,
-        senha: senha,
-      })
+    usuarioService
+      .autenticar({ email, senha })
       .then((response) => {
-        localStorage.setItem('usuario_logado', JSON.stringify(response.data))
-        navigate('/home');
+        localStorage.setItem("usuario_logado", JSON.stringify(response.data));
+        navigate("/home");
       })
       .catch((error) => {
-        const errorMessage = error.response.data;
-        setMensagemErro(errorMessage);
-        console.log(errorMessage);
+        if (error.response?.data) {
+          const { message } = error.response.data;
+          setMensagemErro(message);
+          console.log(`Erro de autenticação: ${message}`);
+        } else {
+          setMensagemErro(
+            "Erro ao tentar autenticar. Por favor, tente novamente mais tarde."
+          );
+          console.error("Erro ao tentar autenticar:", error);
+        }
       });
   };
 
