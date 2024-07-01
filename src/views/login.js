@@ -1,84 +1,73 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import Card from "../components/card";
 import FormGroup from "../components/form-group";
-import UsuarioService from "../services/usuario-service";
+
+import UsuarioService from "../app/service/usuario-service";
+import { mensagemErro } from "../components/toastr";
+import { AuthContext } from "../main/provedor-autenticacao";
 
 const Login = () => {
-  const usuarioService = new UsuarioService();
   const [email, setEmail] = useState("");
   const [senha, setSenha] = useState("");
-  const [mensagemErro, setMensagemErro] = useState(null);
+  const service = new UsuarioService();
   const navigate = useNavigate();
+  const authContext = useContext(AuthContext);
 
   const entrar = () => {
-    usuarioService
+    service
       .autenticar({ email, senha })
       .then((response) => {
-        localStorage.setItem("usuario_logado", JSON.stringify(response.data));
+        authContext.iniciarSessao(response.data);
         navigate("/home");
       })
-      .catch((error) => {
-        if (error.response?.data) {
-          const { message } = error.response.data;
-          setMensagemErro(message);
-          console.log(`Erro de autenticação: ${message}`);
-        } else {
-          setMensagemErro(
-            "Erro ao tentar autenticar. Por favor, tente novamente mais tarde."
-          );
-          console.error("Erro ao tentar autenticar:", error);
-        }
+      .catch((erro) => {
+        mensagemErro(erro.response.data);
       });
   };
 
   const prepareCadastrar = () => {
-    navigate("/cadastro-usuario");
+    navigate("/cadastro-usuarios");
   };
 
   return (
     <div className="row">
-      <div className="col-md-6" style={{ position: "relative", left: "300px" }}>
+      <div className="col-md-6 offset-md-3">
         <div className="bs-docs-section">
           <Card title="Login">
             <div className="row">
-              {mensagemErro && (
-                <span className="text-danger">{mensagemErro}</span>
-              )}
               <div className="col-lg-12">
                 <div className="bs-component">
                   <fieldset>
                     <FormGroup label="Email: *" htmlFor="exampleInputEmail1">
                       <input
+                        type="email"
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
-                        type="email"
                         className="form-control"
                         id="exampleInputEmail1"
                         aria-describedby="emailHelp"
-                        placeholder="Digite o e-mail"
+                        placeholder="Digite o Email"
                       />
                     </FormGroup>
-
                     <FormGroup label="Senha: *" htmlFor="exampleInputPassword1">
                       <input
+                        type="password"
                         value={senha}
                         onChange={(e) => setSenha(e.target.value)}
-                        type="password"
                         className="form-control"
                         id="exampleInputPassword1"
                         placeholder="Digite a senha"
                       />
                     </FormGroup>
-                    <button className="btn btn-success" onClick={entrar}>
-                      Entrar
+                    <button onClick={entrar} className="btn btn-success">
+                      <i className="pi pi-sign-in"></i> Entrar
                     </button>
                     <button
                       onClick={prepareCadastrar}
                       className="btn btn-danger"
-                      style={{ marginLeft: "10px" }}
                     >
-                      Cadastrar
+                      <i className="pi pi-plus"></i> Cadastrar
                     </button>
                   </fieldset>
                 </div>
