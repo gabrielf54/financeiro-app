@@ -1,7 +1,7 @@
 import React from "react";
 
 import Navbar from "../components/navbar";
-import ProvedorAutenticacao from "./provedorAutenticacao";
+import ProvedorAutenticacao from "./provedor-autenticacao";
 import Rotas from "./rotas";
 
 import "toastr/build/toastr.min";

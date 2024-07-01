@@ -1,7 +1,7 @@
 import React from "react";
 
-import { AuthConsumer } from "../main/provedorAutenticacao";
-import NavbarItem from "./navbarItem";
+import { AuthConsumer } from "../main/provedor-autenticacao";
+import NavbarItem from "./navbar-item";
 
 function Navbar(props) {
   return (
