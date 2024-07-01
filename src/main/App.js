@@ -4,15 +4,13 @@ import Navbar from "../components/navbar";
 import ProvedorAutenticacao from "./provedor-autenticacao";
 import Rotas from "./rotas";
 
-import "toastr/build/toastr.min";
-
-import "bootswatch/dist/flatly/bootstrap.css";
-import "toastr/build/toastr.css";
+import "bootswatch/dist/flatly/bootstrap.min.css";
+import "toastr/build/toastr.min.css";
 import "../custom.css";
 
 import "primeicons/primeicons.css";
 import "primereact/resources/primereact.min.css";
-import "primereact/resources/themes/nova-light/theme.css";
+import "primereact/resources/themes/saga-blue/theme.css";
 
 class App extends React.Component {
   render() {
