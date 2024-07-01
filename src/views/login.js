@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Card from "../components/card";
 import FormGroup from "../components/form-group";
-import UsuarioService from "../services/UsuarioService";
+import UsuarioService from "../services/usuario-service";
 
 const Login = () => {
   const usuarioService = new UsuarioService();
