@@ -1,4 +1,4 @@
-import toastr from "./toastr.js";
+import toastr from "toastr";
 
 toastr.options = {
   closeButton: true,
