@@ -1,72 +1,59 @@
-import React from "react";
+import React, { useContext } from "react";
+import {
+  Navigate,
+  Route,
+  BrowserRouter as Router,
+  Routes,
+} from "react-router-dom";
 
-import { AuthConsumer } from "../main/provedorAutenticacao";
-import CadastroUsuario from "../views/cadastroUsuario";
+import { AuthContext } from "../main/provedor-autenticacao";
+import CadastroUsuario from "../views/cadastro-usuario";
 import Home from "../views/home";
 import CadastroLancamentos from "../views/lancamentos/cadastro-lancamentos";
 import ConsultaLancamentos from "../views/lancamentos/consulta-lancamentos";
-import LandingPage from "../views/landingPage";
+import LandingPage from "../views/landing-page";
 import Login from "../views/login";
 
-import { BrowserRouter, Redirect, Route, Switch } from "react-router-dom";
+const RotaAutenticada = ({ children, ...rest }) => {
+  const { isAutenticado } = useContext(AuthContext);
+  return isAutenticado ? children : <Navigate to="/login" />;
+};
 
-function RotaAutenticada({
-  component: Component,
-  isUsuarioAutenticado,
-  ...props
-}) {
+function Rotas() {
   return (
-    <Route
-      exact
-      {...props}
-      render={(componentProps) => {
-        if (isUsuarioAutenticado) {
-          return <Component {...componentProps} />;
-        } else {
-          return (
-            <Redirect
-              to={{
-                pathname: "/login",
-                state: { from: componentProps.location },
-              }}
-            />
-          );
-        }
-      }}
-    />
-  );
-}
+    <Router>
+      <Routes>
+        <Route path="/" element={<LandingPage />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/cadastro-usuarios" element={<CadastroUsuario />} />
 
-function Rotas(props) {
-  return (
-    <BrowserRouter>
-      <Switch>
-        <Route exact path="/" component={LandingPage} />
-        <Route exact path="/login" component={Login} />
-        <Route exact path="/cadastro-usuarios" component={CadastroUsuario} />
-
-        <RotaAutenticada
-          isUsuarioAutenticado={props.isUsuarioAutenticado}
+        <Route
           path="/home"
-          component={Home}
+          element={
+            <RotaAutenticada>
+              <Home />
+            </RotaAutenticada>
+          }
         />
-        <RotaAutenticada
-          isUsuarioAutenticado={props.isUsuarioAutenticado}
+        <Route
           path="/consulta-lancamentos"
-          component={ConsultaLancamentos}
+          element={
+            <RotaAutenticada>
+              <ConsultaLancamentos />
+            </RotaAutenticada>
+          }
         />
-        <RotaAutenticada
-          isUsuarioAutenticado={props.isUsuarioAutenticado}
+        <Route
           path="/cadastro-lancamentos/:id?"
-          component={CadastroLancamentos}
+          element={
+            <RotaAutenticada>
+              <CadastroLancamentos />
+            </RotaAutenticada>
+          }
         />
-      </Switch>
-    </BrowserRouter>
+      </Routes>
+    </Router>
   );
 }
 
-export default () => (
-  <AuthConsumer>
-    {(context) => <Rotas isUsuarioAutenticado={context.isAutenticado} />}
-  </AuthConsumer>
-);
+export default Rotas;
