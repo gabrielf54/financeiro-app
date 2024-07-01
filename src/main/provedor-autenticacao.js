@@ -1,6 +1,5 @@
 import React from "react";
-
-import jwt from "jsonwebtoken";
+import { jwtDecode } from "jwt-decode";
 import AuthService from "../app/service/auth-service";
 
 export const AuthContext = React.createContext();
@@ -17,7 +16,7 @@ class ProvedorAutenticacao extends React.Component {
 
   iniciarSessao = (tokenDTO) => {
     const token = tokenDTO.token;
-    const claims = jwt.decode(token);
+    const claims = jwtDecode(token);
     const usuario = {
       id: claims.userid,
       nome: claims.nome,

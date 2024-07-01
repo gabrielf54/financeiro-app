@@ -1,3 +1,4 @@
+import { jwtDecode } from "jwt-decode";
 import LocalStorageService from "./localstorage-service";
 
 import ApiService from "../api-service";
@@ -11,7 +12,7 @@ export default class AuthService {
     if (!token) {
       return false;
     }
-    const decodedToken = null;
+    const decodedToken = jwtDecode(token);
     const expiration = decodedToken.exp;
 
     const isTokenInvalido = Date.now() >= expiration * 1000;
