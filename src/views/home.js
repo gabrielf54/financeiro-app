@@ -1,28 +1,30 @@
-import axios from "axios";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
+import UsuarioService from "../app/service/usuario-service";
+import { AuthContext } from "../main/provedor-autenticacao";
 
 const Home = () => {
   const [saldo, setSaldo] = useState(0);
+  const { usuarioAutenticado } = useContext(AuthContext);
+  const usuarioService = new UsuarioService();
 
   useEffect(() => {
-    const usuarioLogado = localStorage.getItem("usuario_logado");
-    const usuarioLogadoId = JSON.parse(usuarioLogado).id;
-    axios
-      .get(`http://localhost:8080/usuarios/${usuarioLogadoId}/saldo`)
+    const usuarioLogado = usuarioAutenticado;
+
+    usuarioService
+      .obterSaldoPorUsuario(usuarioLogado.id)
       .then((response) => {
-        console.log(response);
         setSaldo(response.data);
       })
       .catch((error) => {
-        console.error(error);
+        console.error(error.response);
       });
-  });
+  }, [usuarioAutenticado, usuarioService]);
 
   return (
     <div className="jumbotron">
       <h1 className="display-3">Bem vindo!</h1>
       <p className="lead">Esse é seu sistema de finanças.</p>
-      <p className="lead">Seu saldo para o mês atual é de R$ {saldo}</p>
+      <p className="lead">Seu saldo para o mês atual é de R$ {saldo} </p>
       <hr className="my-4" />
       <p>
         E essa é sua área administrativa, utilize um dos menus ou botões abaixo
@@ -31,18 +33,18 @@ const Home = () => {
       <p className="lead">
         <a
           className="btn btn-primary btn-lg"
-          href="#/cadastro-usuario"
+          href="/cadastro-usuarios"
           role="button"
         >
-          <i className="fa fa-users"></i>
+          <i className="pi pi-users"></i>
           Cadastrar Usuário
         </a>
         <a
           className="btn btn-danger btn-lg"
-          href="#/cadastro-lancamento"
+          href="/cadastro-lancamentos"
           role="button"
         >
-          <i className="fa fa-users"></i>
+          <i className="pi pi-money-bill"></i>
           Cadastrar Lançamento
         </a>
       </p>
