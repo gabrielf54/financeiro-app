@@ -1,6 +1,5 @@
 import LocalStorageService from "./localstorage-service";
 
-import jwt from "jsonwebtoken";
 import ApiService from "../api-service";
 
 export const USUARIO_LOGADO = "_usuario_logado";
@@ -12,7 +11,7 @@ export default class AuthService {
     if (!token) {
       return false;
     }
-    const decodedToken = jwt.decode(token);
+    const decodedToken = null;
     const expiration = decodedToken.exp;
 
     const isTokenInvalido = Date.now() >= expiration * 1000;
