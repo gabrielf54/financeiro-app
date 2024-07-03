@@ -49,22 +49,31 @@ export default class LancamentoService extends ApiService {
 
     if (!lancamento.ano) {
       erros.push("Informe o Ano.");
+    } else if (
+      lancamento.ano < 2000 ||
+      lancamento.ano > new Date().getFullYear()
+    ) {
+      erros.push("Ano inválido.");
     }
 
     if (!lancamento.mes) {
       erros.push("Informe o Mês.");
+    } else if (lancamento.mes < 1 || lancamento.mes > 12) {
+      erros.push("Mês inválido.");
     }
 
-    if (!lancamento.descricao) {
-      erros.push("Informe a Descrição.");
+    if (!lancamento.descricao || lancamento.descricao.trim().length < 3) {
+      erros.push("Descrição deve ter pelo menos 3 caracteres.");
     }
 
-    if (!lancamento.valor) {
-      erros.push("Informe o Valor.");
+    if (!lancamento.valor || lancamento.valor <= 0) {
+      erros.push("Valor deve ser maior que zero.");
     }
 
     if (!lancamento.tipo) {
       erros.push("Informe o Tipo.");
+    } else if (!["DESPESA", "RECEITA"].includes(lancamento.tipo)) {
+      erros.push("Tipo inválido.");
     }
 
     if (erros.length > 0) {
