@@ -1,17 +1,17 @@
-import React from "react";
+import React, { memo } from "react";
 
-function NavbarItem({ render, ...props }) {
-  if (render) {
-    return (
-      <li className="nav-item">
-        <a onClick={props.onClick} className="nav-link" href={props.href}>
-          {props.label}
-        </a>
-      </li>
-    );
-  } else {
-    return false;
+const NavbarItem = memo(({ render, href, label }) => {
+  if (!render) {
+    return null;
   }
-}
+
+  return (
+    <li className="nav-item">
+      <a className="nav-link" href={href}>
+        {label}
+      </a>
+    </li>
+  );
+});
 
 export default NavbarItem;
